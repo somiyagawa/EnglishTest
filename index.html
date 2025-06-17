@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大学1年生向け英語力テスト</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #5a67d8;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-container {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #f7fafc;
+            border-radius: 15px;
+            border-left: 5px solid #5a67d8;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .question-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(90, 103, 216, 0.2);
+        }
+
+        .question-header {
+            font-weight: bold;
+            color: #5a67d8;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .question-text {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #2d3748;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .option:hover {
+            background: #e6f2ff;
+            border-color: #5a67d8;
+            transform: translateX(5px);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .option label {
+            cursor: pointer;
+            width: 100%;
+            color: #4a5568;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feedback {
+            font-size: 1.2em;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .correct-answer {
+            color: #48bb78;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px;
+            background: #e6fffa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .incorrect-answer {
+            color: #f56565;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff5f5;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: #edf2f7;
+            border-radius: 8px;
+            color: #2d3748;
+            text-align: left;
+            display: none;
+        }
+
+        .reset-btn {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 大学1年生向け英語力テスト</h1>
+        
+        <form id="englishTest">
+            <!-- Question 1: Grammar - Present Perfect -->
+            <div class="question-container">
+                <div class="question-header">問題 1: 文法（現在完了形）</div>
+                <div class="question-text">
+                    次の文の空欄に入る最も適切な選択肢を選びなさい。<br><br>
+                    "I _____ to Paris three times, but I want to go again next summer."
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q1a" name="q1" value="a">
+                        <label for="q1a">have gone</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1b" name="q1" value="b">
+                        <label for="q1b">have been</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1c" name="q1" value="c">
+                        <label for="q1c">went</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1d" name="q1" value="d">
+                        <label for="q1d">was going</label>
+                    </div>
+                </div>
+                <div class="correct-answer" id="answer1"></div>
+                <div class="explanation" id="explanation1">
+                    <strong>解説:</strong> "have been to" は「〜に行ったことがある」という経験を表す現在完了形です。"have gone to" は「〜に行ってしまった（今もそこにいる）」という意味になるため、この文脈では不適切です。
+                </div>
+            </div>
+
+            <!-- Question 2: Vocabulary -->
+            <div class="question-container">
+                <div class="question-header">問題 2: 語彙</div>
+                <div class="question-text">
+                    次の文の意味に最も近い単語を選びなさい。<br><br>
+                    "The professor's lecture was so _____ that many students fell asleep."
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q2a" name="q2" value="a">
+                        <label for="q2a">fascinating</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2b" name="q2" value="b">
+                        <label for="q2b">monotonous</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2c" name="q2" value="c">
+                        <label for="q2c">controversial</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2d" name="q2" value="d">
+                        <label for="q2d">inspiring</label>
+                    </div>
+                </div>
+                <div class="correct-answer" id="answer2"></div>
+                <div class="explanation" id="explanation2">
+                    <strong>解説:</strong> "monotonous" は「単調な、退屈な」という意味です。多くの学生が眠ってしまったという文脈から、講義が退屈だったことが分かります。
+                </div>
+            </div>
+
+            <!-- Question 3: Reading Comprehension -->
+            <div class="question-container">
+                <div class="question-header">問題 3: 読解</div>
+                <div class="question-text">
+                    次の文章を読んで、質問に答えなさい。<br><br>
+                    "Social media has revolutionized the way we communicate. While it allows us to connect with people worldwide instantly, critics argue that it has reduced the quality of human interaction and created echo chambers where people only encounter opinions similar to their own."<br><br>
+                    この文章の主な論点は何ですか？
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q3a" name="q3" value="a">
+                        <label for="q3a">ソーシャルメディアは完全に有害である</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3b" name="q3" value="b">
+                        <label for="q3b">ソーシャルメディアには良い面と悪い面の両方がある</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3c" name="q3" value="c">
+                        <label for="q3c">人々は世界中とつながるべきではない</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3d" name="q3" value="d">
+                        <label for="q3d">エコーチェンバーは良いことである</label>
+                    </div>
+                </div>
+                <div class="correct-answer" id="answer3"></div>
+                <div class="explanation" id="explanation3">
+                    <strong>解説:</strong> 文章は、ソーシャルメディアが世界中の人々との即座の接続を可能にする一方で（良い面）、人間の交流の質を低下させ、エコーチェンバーを作り出している（悪い面）と述べています。
+                </div>
+            </div>
+
+            <!-- Question 4: Idiom -->
+            <div class="question-container">
+                <div class="question-header">問題 4: 慣用表現</div>
+                <div class="question-text">
+                    次の慣用表現の意味として最も適切なものを選びなさい。<br><br>
+                    "It's raining cats and dogs."
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q4a" name="q4" value="a">
+                        <label for="q4a">動物が空から降ってきている</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4b" name="q4" value="b">
+                        <label for="q4b">雨が非常に激しく降っている</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4c" name="q4" value="c">
+                        <label for="q4c">雨がもうすぐ止む</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4d" name="q4" value="d">
+                        <label for="q4d">ペットショップが混雑している</label>
+                    </div>
+                </div>
+                <div class="correct-answer" id="answer4"></div>
+                <div class="explanation" id="explanation4">
+                    <strong>解説:</strong> "It's raining cats and dogs" は英語の慣用表現で、「土砂降りの雨が降っている」という意味です。実際に動物が降ってくるわけではありません。
+                </div>
+            </div>
+
+            <!-- Question 5: Conditional -->
+            <div class="question-container">
+                <div class="question-header">問題 5: 仮定法</div>
+                <div class="question-text">
+                    次の文の空欄に入る最も適切な選択肢を選びなさい。<br><br>
+                    "If I _____ enough money, I would travel around the world."
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q5a" name="q5" value="a">
+                        <label for="q5a">have</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5b" name="q5" value="b">
+                        <label for="q5b">had</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5c" name="q5" value="c">
+                        <label for="q5c">will have</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5d" name="q5" value="d">
+                        <label for="q5d">would have</label>
+                    </div>
+                </div>
+                <div class="correct-answer" id="answer5"></div>
+                <div class="explanation" id="explanation5">
+                    <strong>解説:</strong> これは仮定法過去（Second Conditional）の文です。現在の事実に反する仮定を表すため、If節では過去形 "had" を使い、主節では "would + 動詞の原形" を使います。
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">答え合わせをする</button>
+        </form>
+
+        <div class="result-container" id="results">
+            <div class="score" id="score"></div>
+            <div class="feedback" id="feedback"></div>
+            <button class="reset-btn" id="resetBtn">もう一度挑戦する</button>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'b'
+        };
+
+        const explanations = {
+            q1: '正解: (b) have been',
+            q2: '正解: (b) monotonous',
+            q3: '正解: (b) ソーシャルメディアには良い面と悪い面の両方がある',
+            q4: '正解: (b) 雨が非常に激しく降っている',
+            q5: '正解: (b) had'
+        };
+
+        document.getElementById('englishTest').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let score = 0;
+            const totalQuestions = 5;
+            
+            // Check answers and show results
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionName = 'q' + i;
+                const selectedAnswer = document.querySelector(`input[name="${questionName}"]:checked`);
+                const answerDiv = document.getElementById('answer' + i);
+                const explanationDiv = document.getElementById('explanation' + i);
+                
+                if (selectedAnswer) {
+                    if (selectedAnswer.value === correctAnswers[questionName]) {
+                        score++;
+                        answerDiv.textContent = '✓ 正解！';
+                        answerDiv.className = 'correct-answer';
+                        answerDiv.style.display = 'block';
+                    } else {
+                        answerDiv.textContent = '✗ 不正解 - ' + explanations[questionName];
+                        answerDiv.className = 'incorrect-answer';
+                        answerDiv.style.display = 'block';
+                    }
+                    explanationDiv.style.display = 'block';
+                } else {
+                    answerDiv.textContent = '✗ 未回答 - ' + explanations[questionName];
+                    answerDiv.className = 'incorrect-answer';
+                    answerDiv.style.display = 'block';
+                    explanationDiv.style.display = 'block';
+                }
+            }
+            
+            // Show results
+            const resultContainer = document.getElementById('results');
+            const scoreElement = document.getElementById('score');
+            const feedbackElement = document.getElementById('feedback');
+            
+            scoreElement.textContent = `${score} / ${totalQuestions}`;
+            
+            let feedback = '';
+            const percentage = (score / totalQuestions) * 100;
+            
+            if (percentage === 100) {
+                feedback = '🎉 素晴らしい！パーフェクトです！<br>英語の基礎がしっかりと身についています。';
+            } else if (percentage >= 80) {
+                feedback = '🌟 とても良くできました！<br>基本的な英語力は十分に備わっています。';
+            } else if (percentage >= 60) {
+                feedback = '👍 良い調子です！<br>もう少し練習すれば、さらに上達するでしょう。';
+            } else if (percentage >= 40) {
+                feedback = '💪 まずまずの結果です。<br>間違えた問題を復習して、理解を深めましょう。';
+            } else {
+                feedback = '📚 もっと頑張りましょう！<br>基礎から復習することをお勧めします。';
+            }
+            
+            feedbackElement.innerHTML = feedback;
+            resultContainer.style.display = 'block';
+            
+            // Show reset button
+            document.getElementById('resetBtn').style.display = 'inline-block';
+            
+            // Disable submit button
+            document.querySelector('.submit-btn').disabled = true;
+            document.querySelector('.submit-btn').style.opacity = '0.6';
+            document.querySelector('.submit-btn').style.cursor = 'not-allowed';
+            
+            // Scroll to results
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        // Reset button functionality
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            // Reset form
+            document.getElementById('englishTest').reset();
+            
+            // Hide all answers and explanations
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById('answer' + i).style.display = 'none';
+                document.getElementById('explanation' + i).style.display = 'none';
+            }
+            
+            // Hide results
+            document.getElementById('results').style.display = 'none';
+            
+            // Re-enable submit button
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
